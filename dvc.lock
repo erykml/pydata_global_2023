@@ -1,0 +1,45 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: python src/prepare_data.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 7b09060ecdc917e10329b41be3536a4d.dir
+      size: 73839
+      nfiles: 1
+    - path: src/prepare_data.py
+      hash: md5
+      md5: a7385b4bc38668c5f59fb1536ab3fc53
+      size: 1205
+    params:
+      params.yaml:
+        prepare_data:
+          test_size: 0.2
+          include_mega_evol: false
+          max_generation: 9
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 267f611756a4158ac7059e61182c7d48.dir
+      size: 56791
+      nfiles: 4
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: src/train.py
+      hash: md5
+      md5: c554496caf63d33ad8e21296b2171566
+      size: 1181
+    params:
+      params.yaml:
+        train:
+          params:
+            n_estimators: 100
+            max_depth: 10
+            class_weight:
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: fd830b10c62c7ff34e09404c9d2edbbb
+      size: 614777
