@@ -27,6 +27,11 @@ stages:
   train:
     cmd: python src/train.py
     deps:
+    - path: data/processed
+      hash: md5
+      md5: 267f611756a4158ac7059e61182c7d48.dir
+      size: 56791
+      nfiles: 4
     - path: src/train.py
       hash: md5
       md5: c554496caf63d33ad8e21296b2171566
