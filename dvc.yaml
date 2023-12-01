@@ -2,21 +2,47 @@ stages:
   prepare_data:
     cmd: python src/prepare_data.py
     deps:
-      - src/prepare_data.py
-      - data/raw
+    - src/prepare_data.py
+    - data/raw
     params:
-      - prepare_data
+    - prepare_data
     outs:
-      - data/processed
+    - data/processed
   train:
     cmd: python src/train.py
     deps:
-      - src/train.py
-      - data/processed
+    - src/train.py
+    - data/processed
     params:
-      - train
+    - train
     outs:
-      - models/model.joblib
+    - models/model.joblib
     metrics:
-      - metrics.json:
-          cache: false
+    - metrics.json:
+        cache: false
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
+- dvclive/plots/sklearn/confusion_matrix.json:
+    template: confusion
+    x: actual
+    y: predicted
+    title: Confusion Matrix
+    x_label: True Label
+    y_label: Predicted Label
+- dvclive/plots/sklearn/roc.json:
+    template: simple
+    x: fpr
+    y: tpr
+    title: Receiver operating characteristic (ROC)
+    x_label: False Positive Rate
+    y_label: True Positive Rate
+- dvclive/plots/sklearn/precision_recall.json:
+    template: simple
+    x: recall
+    y: precision
+    title: Precision-Recall Curve
+    x_label: Recall
+    y_label: Precision

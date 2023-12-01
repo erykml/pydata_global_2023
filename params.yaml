@@ -6,5 +6,5 @@ prepare_data:
 train:
   params:
     n_estimators: 100
-    max_depth: 10
+    max_depth: 15
     class_weight: null

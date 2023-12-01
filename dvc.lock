@@ -34,21 +34,21 @@ stages:
       nfiles: 4
     - path: src/train.py
       hash: md5
-      md5: a0b4273558a315ef7bc6f0046a7fb492
-      size: 1257
+      md5: 792697179cb35935cadfe2172b3c0351
+      size: 2061
     params:
       params.yaml:
         train:
           params:
             n_estimators: 100
-            max_depth: 10
+            max_depth: 15
             class_weight:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 61fe3da6b4ede920917ef7aad6947ab6
-      size: 131
+      md5: 9600c1ead3ea55faad7cb105632a36be
+      size: 93
     - path: models/model.joblib
       hash: md5
-      md5: fd830b10c62c7ff34e09404c9d2edbbb
-      size: 614777
+      md5: 8c45dc4ce52bd5521addbfc93f0f6d7f
+      size: 339766

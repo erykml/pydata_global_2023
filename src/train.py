@@ -6,9 +6,13 @@ import pandas as pd
 from joblib import dump
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from lightgbm import LGBMClassifier
 
 from constants import DATA_PROCESSED_DIR, MODELS_DIR
 from utils import load_params
+
+from dvclive import Live
+from dvclive.lgbm import DVCLiveCallback
 
 params = load_params()["train"]
 
@@ -19,23 +23,38 @@ X_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_test.csv", index_col="Name")
 y_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_test.csv", index_col="Name")
 
 # train a model
-model = RandomForestClassifier(random_state=42, **params["params"])
-model.fit(X_train, y_train)
+# model = RandomForestClassifier(random_state=42, **params["params"])
+model = LGBMClassifier(random_state=42, objective="binary", **params["params"])
 
-# store the trained model
-model_dir = Path(MODELS_DIR)
-model_dir.mkdir(exist_ok=True)
+with Live(save_dvc_exp=True) as live:
+    fit_params = {
+        "eval_set": [(X_test, y_test)],
+        "eval_names": ["valid"],
+        "callbacks": [DVCLiveCallback(live=live)],
+    }
+    model.fit(X_train, y_train, **fit_params)
 
-dump(model, f"{MODELS_DIR}/model.joblib")
+    # store the trained model
+    model_dir = Path(MODELS_DIR)
+    model_dir.mkdir(exist_ok=True)
 
-# obtain predictions + evaluate
-y_pred = model.predict(X_test)
+    dump(model, f"{MODELS_DIR}/model.joblib")
 
-metrics = {
-    "accuracy": round(accuracy_score(y_test, y_pred), 4),
-    "recall": round(recall_score(y_test, y_pred), 4),
-    "precision": round(precision_score(y_test, y_pred), 4),
-    "f1_score": round(f1_score(y_test, y_pred), 4),
-}
+    # obtain predictions
+    y_pred = model.predict(X_test)
+    y_pred_prob = model.predict_proba(X_test)[:, 1]
+    y_test_array = y_test.values.ravel()
 
-json.dump(obj=metrics, fp=open("metrics.json", "w"), indent=4, sort_keys=True)
+    # evaluate - get metrics + plots
+    live.log_sklearn_plot("confusion_matrix", y_test_array, y_pred)
+    live.log_sklearn_plot("roc", y_test_array, y_pred_prob)
+    live.log_sklearn_plot("precision_recall", y_test_array, y_pred_prob)
+
+    metrics = {
+        "accuracy": round(accuracy_score(y_test, y_pred), 4),
+        "recall": round(recall_score(y_test, y_pred), 4),
+        "precision": round(precision_score(y_test, y_pred), 4),
+        "f1_score": round(f1_score(y_test, y_pred), 4),
+    }
+
+    json.dump(obj=metrics, fp=open("metrics.json", "w"), indent=4, sort_keys=True)
