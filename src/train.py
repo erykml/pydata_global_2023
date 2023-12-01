@@ -4,8 +4,7 @@ import json
 
 import pandas as pd
 from joblib import dump
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 from lightgbm import LGBMClassifier
 
 from constants import DATA_PROCESSED_DIR, MODELS_DIR
@@ -27,6 +26,7 @@ y_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_test.csv", index_col="Name")
 model = LGBMClassifier(random_state=42, objective="binary", **params["params"])
 
 with Live(save_dvc_exp=True) as live:
+    # for simplicity, we use the training set as validation set
     fit_params = {
         "eval_set": [(X_test, y_test)],
         "eval_names": ["valid"],
@@ -54,7 +54,6 @@ with Live(save_dvc_exp=True) as live:
         "accuracy": round(accuracy_score(y_test, y_pred), 4),
         "recall": round(recall_score(y_test, y_pred), 4),
         "precision": round(precision_score(y_test, y_pred), 4),
-        "f1_score": round(f1_score(y_test, y_pred), 4),
     }
 
     json.dump(obj=metrics, fp=open("metrics.json", "w"), indent=4, sort_keys=True)
