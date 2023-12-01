@@ -16,21 +16,21 @@ stages:
       params.yaml:
         prepare_data:
           test_size: 0.2
-          include_mega_evol: true
+          include_mega_evol: false
           max_generation: 9
     outs:
     - path: data/processed
       hash: md5
-      md5: 2ed4c4219f28db0066059314f6c2afc0.dir
-      size: 59773
+      md5: 267f611756a4158ac7059e61182c7d48.dir
+      size: 56791
       nfiles: 4
   train:
     cmd: python src/train.py
     deps:
     - path: data/processed
       hash: md5
-      md5: 2ed4c4219f28db0066059314f6c2afc0.dir
-      size: 59773
+      md5: 267f611756a4158ac7059e61182c7d48.dir
+      size: 56791
       nfiles: 4
     - path: src/train.py
       hash: md5
@@ -41,14 +41,14 @@ stages:
         train:
           params:
             n_estimators: 100
-            max_depth: 15
+            max_depth: -1
             class_weight:
     outs:
     - path: metrics.json
       hash: md5
-      md5: d29df05b7ee7700731f9dfe98c172074
-      size: 72
+      md5: c4c84756c1e9b0a2e5051d3ca780fe79
+      size: 69
     - path: models/model.joblib
       hash: md5
-      md5: 06099e29b3466413904fd7c4f311cc7d
-      size: 335398
+      md5: 02343aee6375557dff4183a7c050def0
+      size: 340422
