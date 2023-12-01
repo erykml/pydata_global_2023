@@ -17,3 +17,6 @@ stages:
       - train
     outs:
       - models/model.joblib
+    metrics:
+      - metrics.json:
+          cache: false

@@ -34,8 +34,8 @@ stages:
       nfiles: 4
     - path: src/train.py
       hash: md5
-      md5: c554496caf63d33ad8e21296b2171566
-      size: 1181
+      md5: a0b4273558a315ef7bc6f0046a7fb492
+      size: 1257
     params:
       params.yaml:
         train:
@@ -44,6 +44,10 @@ stages:
             max_depth: 10
             class_weight:
     outs:
+    - path: metrics.json
+      hash: md5
+      md5: 61fe3da6b4ede920917ef7aad6947ab6
+      size: 131
     - path: models/model.joblib
       hash: md5
       md5: fd830b10c62c7ff34e09404c9d2edbbb

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import json
 
 import pandas as pd
 from joblib import dump
@@ -31,10 +32,10 @@ dump(model, f"{MODELS_DIR}/model.joblib")
 y_pred = model.predict(X_test)
 
 metrics = {
-    "accuracy": accuracy_score(y_test, y_pred),
-    "recall": recall_score(y_test, y_pred),
-    "precision": precision_score(y_test, y_pred),
-    "f1_score": f1_score(y_test, y_pred),
+    "accuracy": round(accuracy_score(y_test, y_pred), 4),
+    "recall": round(recall_score(y_test, y_pred), 4),
+    "precision": round(precision_score(y_test, y_pred), 4),
+    "f1_score": round(f1_score(y_test, y_pred), 4),
 }
 
-print(metrics)
+json.dump(obj=metrics, fp=open("metrics.json", "w"), indent=4, sort_keys=True)
