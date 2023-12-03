@@ -34,8 +34,8 @@ stages:
       nfiles: 4
     - path: src/train.py
       hash: md5
-      md5: b89dbd195ccb1762f81fad0d91e97702
-      size: 1439
+      md5: dfecd2de6e0fb163dda136f100507cba
+      size: 1506
     params:
       params.yaml:
         train:
@@ -44,14 +44,14 @@ stages:
             max_depth: -1
             class_weight:
     outs:
+    - path: custom_plots/feat_importance.png
+      hash: md5
+      md5: 2d71a43def9af0c6c3fe0e2e84d3fc56
+      size: 24070
     - path: models/model.joblib
       hash: md5
       md5: 33ace2564ab9db2cc6fc64e382526ee0
       size: 407878
-    - path: plots/feat_importance.png
-      hash: md5
-      md5: 2d71a43def9af0c6c3fe0e2e84d3fc56
-      size: 24070
   eval:
     cmd: python src/evaluate.py
     deps:

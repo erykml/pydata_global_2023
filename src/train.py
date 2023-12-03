@@ -9,7 +9,7 @@ from joblib import dump
 from lightgbm import LGBMClassifier, plot_importance
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
-from constants import DATA_PROCESSED_DIR, MODELS_DIR
+from constants import DATA_PROCESSED_DIR, MODELS_DIR, CUSTOM_PLOTS_DIR
 from dvclive import Live
 from utils import load_params
 
@@ -41,7 +41,8 @@ with Live(save_dvc_exp=True) as live:
     dump(model, f"{MODELS_DIR}/model.joblib")
 
     ax = plot_importance(model, importance_type="split")
-    plt.savefig("plots/feat_importance.png")
-    live.log_image("feat_importance.png", "plots/feat_importance.png")
+    feat_imp_plot_path = f"{CUSTOM_PLOTS_DIR}/feat_importance.png"
+    plt.savefig(feat_imp_plot_path)
+    live.log_image("feat_importance.png", feat_imp_plot_path)
 
     print("Done!")

@@ -17,7 +17,7 @@ stages:
     - train
     outs:
     - models/model.joblib
-    - plots/feat_importance.png
+    - custom_plots/feat_importance.png
   eval:
     cmd: python src/evaluate.py
     deps:
@@ -28,24 +28,8 @@ stages:
     - metrics.json:
         cache: false
 plots:
-- dvclive/plots/sklearn/confusion_matrix.json:
-    template: confusion
-    x: actual
-    y: predicted
-    title: Confusion Matrix
-    x_label: True Label
-    y_label: Predicted Label
-- dvclive/plots/sklearn/roc.json:
-    template: simple
-    x: fpr
-    y: tpr
-    title: Receiver operating characteristic (ROC)
-    x_label: False Positive Rate
-    y_label: True Positive Rate
-- dvclive/plots/sklearn/precision_recall.json:
-    template: simple
-    x: recall
-    y: precision
-    title: Precision-Recall Curve
-    x_label: Recall
-    y_label: Precision
+- dvclive/plots/metrics:
+    x: step
+- dvclive/plots/images
+metrics:
+- dvclive/metrics.json
