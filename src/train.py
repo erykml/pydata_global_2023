@@ -2,10 +2,11 @@ import json
 import os
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 from dvclive.lgbm import DVCLiveCallback
 from joblib import dump
-from lightgbm import LGBMClassifier
+from lightgbm import LGBMClassifier, plot_importance
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 from constants import DATA_PROCESSED_DIR, MODELS_DIR
@@ -38,5 +39,9 @@ with Live(save_dvc_exp=True) as live:
     model_dir.mkdir(exist_ok=True)
 
     dump(model, f"{MODELS_DIR}/model.joblib")
+
+    ax = plot_importance(model, importance_type="split")
+    plt.savefig("plots/feat_importance.png")
+    live.log_image("feat_importance.png", "plots/feat_importance.png")
 
     print("Done!")
