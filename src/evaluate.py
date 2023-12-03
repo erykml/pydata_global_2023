@@ -1,17 +1,11 @@
 import json
-import os
-from pathlib import Path
 
 import joblib
 import pandas as pd
-from dvclive.lgbm import DVCLiveCallback
-from joblib import dump
-from lightgbm import LGBMClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 from constants import DATA_PROCESSED_DIR, MODELS_DIR
 from dvclive import Live
-from utils import load_params
 
 # Load the model
 model = joblib.load(f"{MODELS_DIR}/model.joblib")

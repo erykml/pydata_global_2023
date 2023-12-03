@@ -1,5 +1,3 @@
-import json
-import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -7,9 +5,8 @@ import pandas as pd
 from dvclive.lgbm import DVCLiveCallback
 from joblib import dump
 from lightgbm import LGBMClassifier, plot_importance
-from sklearn.metrics import accuracy_score, precision_score, recall_score
 
-from constants import DATA_PROCESSED_DIR, MODELS_DIR, CUSTOM_PLOTS_DIR
+from constants import CUSTOM_PLOTS_DIR, DATA_PROCESSED_DIR, MODELS_DIR
 from dvclive import Live
 from utils import load_params
 
