@@ -8,9 +8,9 @@ from lightgbm import LGBMClassifier, plot_importance
 
 from constants import CUSTOM_PLOTS_DIR, DATA_PROCESSED_DIR, MODELS_DIR
 from dvclive import Live
-from utils import load_params
+from dvc.api import params_show
 
-params = load_params()["train"]
+params = params_show()["train"]
 
 # load training data
 X_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_train.csv", index_col="Name")

@@ -13,3 +13,7 @@ The example is built on the case of classifying Pokémon as legendary.
 * https://pokemondb.net/pokedex/all
 * https://www.serebii.net/pokemon/legendary.shtml
 * https://www.serebii.net/pokemon/specialpokemon.shtml
+
+Icons:
+* https://www.flaticon.com/free-icon/csv_9159105
+* https://www.flaticon.com/free-icon/cloud_3222791
