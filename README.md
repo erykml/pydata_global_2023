@@ -17,3 +17,4 @@ The example is built on the case of classifying Pokémon as legendary.
 Icons:
 * https://www.flaticon.com/free-icon/csv_9159105
 * https://www.flaticon.com/free-icon/cloud_3222791
+* https://www.flaticon.com/free-icon/laptop_114734
