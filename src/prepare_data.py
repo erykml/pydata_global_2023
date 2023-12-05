@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 
 import pandas as pd
+from dvc.api import params_show
 from sklearn.model_selection import train_test_split
 
 from constants import DATA_PROCESSED_DIR, DATA_RAW_DIR
-from utils import load_params
 
 # settings
 FEATURE_LIST = [
@@ -21,7 +21,7 @@ FEATURE_LIST = [
 TARGET = "Legendary"
 
 # get the params
-params = load_params()["prepare_data"]
+params = params_show()["prepare_data"]
 
 # load data
 df = pd.read_csv(os.path.join(DATA_RAW_DIR, "pokedex.csv")).set_index("Name")

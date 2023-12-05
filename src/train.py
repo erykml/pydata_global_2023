@@ -1,40 +1,50 @@
-import os
+import warnings
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
+from dvc.api import params_show
+from dvclive import Live
+from dvclive.lgbm import DVCLiveCallback
 from joblib import dump
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from lightgbm import LGBMClassifier, plot_importance
 
-from constants import DATA_PROCESSED_DIR, MODELS_DIR
-from utils import load_params
+from constants import CUSTOM_PLOTS_DIR, DATA_PROCESSED_DIR, MODELS_DIR
 
-params = load_params()["train"]
+warnings.filterwarnings("ignore", category=UserWarning, module="lightgbm")
+
+params = params_show()["train"]
 
 # load training data
 X_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_train.csv", index_col="Name")
-y_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_train.csv", index_col="Name")
-X_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_test.csv", index_col="Name")
-y_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_test.csv", index_col="Name")
+y_train = pd.read_csv(
+    f"{DATA_PROCESSED_DIR}/y_train.csv", index_col="Name"
+).values.ravel()
 
 # train a model
-model = RandomForestClassifier(random_state=42, **params["params"])
-model.fit(X_train, y_train)
+model = LGBMClassifier(random_state=42, objective="binary", **params["params"])
 
-# store the trained model
-model_dir = Path(MODELS_DIR)
-model_dir.mkdir(exist_ok=True)
+with Live("results/train") as live:
+    print("Training the model ----")
 
-dump(model, f"{MODELS_DIR}/model.joblib")
+    # for simplicity, we use the training set as validation set
+    fit_params = {
+        "eval_set": [(X_train, y_train)],
+        "eval_names": ["valid"],
+        "callbacks": [DVCLiveCallback(live=live)],
+    }
+    model.fit(X_train, y_train, **fit_params)
+    print("Training completed. Storing the model...")
 
-# obtain predictions + evaluate
-y_pred = model.predict(X_test)
+    # store the trained model
+    model_dir = Path(MODELS_DIR)
+    model_dir.mkdir(exist_ok=True)
 
-metrics = {
-    "accuracy": accuracy_score(y_test, y_pred),
-    "recall": recall_score(y_test, y_pred),
-    "precision": precision_score(y_test, y_pred),
-    "f1_score": f1_score(y_test, y_pred),
-}
+    dump(model, f"{MODELS_DIR}/model.joblib")
 
-print(metrics)
+    ax = plot_importance(model, importance_type="split")
+    feat_imp_plot_path = f"{CUSTOM_PLOTS_DIR}/feat_importance.png"
+    plt.savefig(feat_imp_plot_path)
+    live.log_image("feat_importance.png", feat_imp_plot_path)
+
+    print("Done!")

@@ -1,5 +1,4 @@
 from collections import Counter
-import yaml
 
 
 def get_generation(pokedex_number):
@@ -41,13 +40,3 @@ def remove_repeated_words(input_string):
     result_string = " ".join(unique_words)
 
     return result_string
-
-
-def load_params(file_path="params.yaml"):
-    with open(file_path, "r") as stream:
-        try:
-            params = yaml.safe_load(stream)
-            return params
-        except yaml.YAMLError as e:
-            print(f"Error loading YAML file {file_path}: {e}")
-            return None
