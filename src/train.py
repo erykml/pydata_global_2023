@@ -19,7 +19,7 @@ y_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_train.csv", index_col="Name")
 # train a model
 model = LGBMClassifier(random_state=42, objective="binary", **params["params"])
 
-with Live(save_dvc_exp=True) as live:
+with Live("results/train") as live:
     print("Training the model ----")
 
     # for simplicity, we use the training set as validation set

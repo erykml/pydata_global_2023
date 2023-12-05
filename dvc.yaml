@@ -31,5 +31,30 @@ plots:
 - dvclive/plots/metrics:
     x: step
 - dvclive/plots/images
+- results/train/plots/metrics:
+    x: step
+- results/train/plots/images
+- results/evaluate/plots/sklearn/confusion_matrix.json:
+    template: confusion
+    x: actual
+    y: predicted
+    title: Confusion Matrix
+    x_label: True Label
+    y_label: Predicted Label
+- results/evaluate/plots/sklearn/roc.json:
+    template: simple
+    x: fpr
+    y: tpr
+    title: Receiver operating characteristic (ROC)
+    x_label: False Positive Rate
+    y_label: True Positive Rate
+- results/evaluate/plots/sklearn/precision_recall.json:
+    template: simple
+    x: recall
+    y: precision
+    title: Precision-Recall Curve
+    x_label: Recall
+    y_label: Precision
 metrics:
 - dvclive/metrics.json
+- results/train/metrics.json

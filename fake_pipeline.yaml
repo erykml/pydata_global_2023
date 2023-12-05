@@ -1,0 +1,27 @@
+stages:
+  prepare_data:
+    cmd: python src/prepare_data.py
+    deps:
+    - src/prepare_data.py
+    - data/raw
+    params:
+    - prepare_data
+    outs:
+    - data/processed
+  train:
+    cmd: python src/train.py
+    deps:
+    - src/train.py
+    - data/processed
+    params:
+    - train
+    outs:
+    - models/model.joblib
+  eval:
+    cmd: python src/evaluate.py
+    deps:
+    - src/evaluate.py
+    - data/processed
+    - models/model.joblib
+    metrics:
+    - metrics.json

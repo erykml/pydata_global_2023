@@ -20,7 +20,7 @@ y_pred_prob = model.predict_proba(X_test)[:, 1]
 y_test_array = y_test.values.ravel()
 
 # evaluate - get metrics + plots
-with Live(save_dvc_exp=True) as live:
+with Live("results/evaluate") as live:
     live.log_sklearn_plot("confusion_matrix", y_test_array, y_pred)
     live.log_sklearn_plot("roc", y_test_array, y_pred_prob)
     live.log_sklearn_plot("precision_recall", y_test_array, y_pred_prob)
