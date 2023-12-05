@@ -30,5 +30,6 @@ with Live("results/evaluate") as live:
         "recall": round(recall_score(y_test, y_pred), 4),
         "precision": round(precision_score(y_test, y_pred), 4),
     }
+    print(metrics)
 
     json.dump(obj=metrics, fp=open("metrics.json", "w"), indent=4, sort_keys=True)

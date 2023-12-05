@@ -28,9 +28,6 @@ stages:
     - metrics.json:
         cache: false
 plots:
-- dvclive/plots/metrics:
-    x: step
-- dvclive/plots/images
 - results/train/plots/metrics:
     x: step
 - results/train/plots/images
@@ -56,5 +53,4 @@ plots:
     x_label: Recall
     y_label: Precision
 metrics:
-- dvclive/metrics.json
 - results/train/metrics.json
