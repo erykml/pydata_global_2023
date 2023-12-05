@@ -1,20 +1,25 @@
+import warnings
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from dvc.api import params_show
+from dvclive import Live
 from dvclive.lgbm import DVCLiveCallback
 from joblib import dump
 from lightgbm import LGBMClassifier, plot_importance
 
 from constants import CUSTOM_PLOTS_DIR, DATA_PROCESSED_DIR, MODELS_DIR
-from dvclive import Live
-from dvc.api import params_show
+
+warnings.filterwarnings("ignore", category=UserWarning, module="lightgbm")
 
 params = params_show()["train"]
 
 # load training data
 X_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_train.csv", index_col="Name")
-y_train = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_train.csv", index_col="Name")
+y_train = pd.read_csv(
+    f"{DATA_PROCESSED_DIR}/y_train.csv", index_col="Name"
+).values.ravel()
 
 # train a model
 model = LGBMClassifier(random_state=42, objective="binary", **params["params"])

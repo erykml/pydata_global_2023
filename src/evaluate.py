@@ -12,18 +12,19 @@ model = joblib.load(f"{MODELS_DIR}/model.joblib")
 
 # load test data
 X_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/X_test.csv", index_col="Name")
-y_test = pd.read_csv(f"{DATA_PROCESSED_DIR}/y_test.csv", index_col="Name")
+y_test = pd.read_csv(
+    f"{DATA_PROCESSED_DIR}/y_test.csv", index_col="Name"
+).values.ravel()
 
 # obtain predictions
 y_pred = model.predict(X_test)
 y_pred_prob = model.predict_proba(X_test)[:, 1]
-y_test_array = y_test.values.ravel()
 
 # evaluate - get metrics + plots
 with Live("results/evaluate") as live:
-    live.log_sklearn_plot("confusion_matrix", y_test_array, y_pred)
-    live.log_sklearn_plot("roc", y_test_array, y_pred_prob)
-    live.log_sklearn_plot("precision_recall", y_test_array, y_pred_prob)
+    live.log_sklearn_plot("confusion_matrix", y_test, y_pred)
+    live.log_sklearn_plot("roc", y_test, y_pred_prob)
+    live.log_sklearn_plot("precision_recall", y_test, y_pred_prob)
 
     metrics = {
         "accuracy": round(accuracy_score(y_test, y_pred), 4),
